@@ -21,15 +21,34 @@ extension Places {
             self.title = newValue
         }
     }
-    var strId : String {
+    var strDesc:String {
         get {
-            "\(self.id)"
+            self.title ?? "unknown"
         }
         set {
-            guard let id = Int16(newValue) else {
+            self.title = newValue
+        }
+    }
+    var strLatitude : String {
+        get {
+            "\(self.latitude)"
+        }
+        set {
+            guard let latitude = Float(newValue) else {
                 return
             }
-            self.id = id
+            self.latitude = latitude
+        }
+    }
+    var strLongitude : String {
+        get {
+            "\(self.longitude)"
+        }
+        set {
+            guard let longitude = Float(newValue) else {
+                return
+            }
+            self.longitude = longitude
         }
     }
     var strUrl: String {
@@ -40,9 +59,6 @@ extension Places {
             guard let url = URL(string: newValue) else {return}
             self.imgurl = url
         }
-    }
-    var rowDisplay:String {
-        "Name: \(self.strTitle) (age: \(self.strId))"
     }
     func getImage() async ->Image {
         guard let url = self.imgurl else {return defaultImage}
@@ -63,13 +79,12 @@ extension Places {
 func createInitAnimals() {
     
 }
-//func saveData() {
-//    let ctx = PersistenceHandler.shared.container.viewContext
-//    do {
-//        try ctx.save()
-//    }catch {
-//        print("Error to save with \(error)")
-//    }
-//}
 
-
+func saveData() {
+    let ctx = PersistenceHandler.shared.container.viewContext
+    do{
+        try ctx.save()
+    } catch {
+        fatalError("Error in save data with \(error)")
+    }
+}

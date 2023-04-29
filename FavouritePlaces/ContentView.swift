@@ -10,40 +10,27 @@ import CoreData
 struct ContentView: View {
     
     @Environment(\.managedObjectContext) var ctx
-    @FetchRequest(entity: Places.entity(), sortDescriptors: [
-        NSSortDescriptor(key: "id", ascending: true)
-        ])
+    @FetchRequest(entity: Places.entity(),
+                  sortDescriptors: [NSSortDescriptor(key: "id", ascending: true)])
     var places: FetchedResults<Places>
-    @State var isAdding = false
-    @State var name = ""
-    @State var address = ""
+    
     var body: some View {
         NavigationView {
             VStack {
-                if isAdding {
-                    Text("New contact Name")
-                    TextField("name:", text: $name)
-                    Button("Confirm New place") {
-                        addNewPlace()
-                        isAdding = false
-                    }
-                } else {
-                    Button("Add New Place") {
-                        isAdding = true
-                    }
+                Button("Add New Place") {
+                    addNewPlace()
                 }
                 List {
                     ForEach(places) {
                         place in
                         NavigationLink(destination: DetailView(place: place)) {
-                            Text(place.title ?? "")
                             RowView(place: place)
                         }
 
                     }.onDelete { idx in
-                        deleteContact(idx)
+                        deletePlaces(idx)
                     }.onMove { idx, pos in
-                        moveContact(idx, pos)
+                        movePlaces(idx, pos)
                     }
                 }
             }
@@ -54,7 +41,7 @@ struct ContentView: View {
         }
     }
     
-    func moveContact(_ idx: IndexSet, _ p: Int) {
+    func movePlaces(_ idx: IndexSet, _ p: Int) {
         var posArr = places.map(\.id)
         posArr.move(fromOffsets: idx, toOffset: p)
         posArr.indices.forEach { i in
@@ -62,26 +49,15 @@ struct ContentView: View {
         }
         saveData()
     }
-    func sortContacts()->Int16 {
-        var pos:Int16 = 1
-        places.forEach { place in
-            place.id = pos
-            pos += 1
-        }
-        return pos
-    }
     func addNewPlace() {
-        guard name != "" else {
-            return
-        }
         let place = Places(context: ctx)
-        place.title = name
-        place.id = sortContacts()
+        place.title = "New Place"
+        place.desc = "No Description"
+        place.latitude = 0.0
+        place.longitude = 0.0
         saveData()
-        name = ""
-        address = ""
     }
-    func deleteContact(_ idx: IndexSet) {
+    func deletePlaces(_ idx: IndexSet) {
         idx.map{places[$0]}.forEach{place in ctx.delete(place)}
         saveData()
     }
