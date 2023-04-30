@@ -51,11 +51,11 @@ struct DetailView: View {
                     TextField("Location: ", text: $location)
                     VStack{
                         HStack{
-                            Text("Latitude: ").font(.headline).foregroundColor(.accentColor)
+                            Text("Enter Latitude: ").font(.headline).foregroundColor(.accentColor)
                             TextField("Latitude: ", text: $latitude)
                         }
                         HStack{
-                            Text("Longitude: ").font(.headline).foregroundColor(.accentColor)
+                            Text("Enter Longitude: ").font(.headline).foregroundColor(.accentColor)
                             TextField("Longitude: ", text: $longitude)
                         }
                     }
