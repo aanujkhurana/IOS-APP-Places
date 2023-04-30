@@ -8,6 +8,7 @@
 import SwiftUI
 import CoreData
 
+/// to interact with core data
 struct PersistenceHandler {
     static let shared = PersistenceHandler()
     let container: NSPersistentContainer
@@ -20,12 +21,3 @@ struct PersistenceHandler {
         }
     }
 }
-
-//func saveData() {
-//    let ctx = PersistenceHandler.shared.container.viewContext
-//    do{
-//        try ctx.save()
-//    } catch {
-//        fatalError("Error in save data with \(error)")
-//    }
-//}

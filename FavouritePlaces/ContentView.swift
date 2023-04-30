@@ -26,10 +26,12 @@ struct ContentView: View {
                         deletePlaces(idx)
                     }
                 }.navigationTitle("Favourite Places 🌎")
-                    .navigationBarItems(leading: Button("+ Add"){addNewPlace()}, trailing: EditButton())
+                .navigationBarItems(leading: Button("+ Add"){addNewPlace()}, trailing: EditButton())
             }
         }
     }
+    
+    /// function to add new place
     func addNewPlace() {
         let place = Places(context: ctx)
         place.title = "New Place"
@@ -37,6 +39,7 @@ struct ContentView: View {
         place.longitude = 0.0
         saveData()
     }
+    /// function to delete places
     func deletePlaces(_ idx: IndexSet) {
         idx.map{places[$0]}.forEach{place in ctx.delete(place)}
         saveData()

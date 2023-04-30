@@ -10,10 +10,11 @@ import SwiftUI
 struct RowView: View {
     @State var image = defaultImage
     @ObservedObject var place: Places
+    
     var body: some View {
         HStack{
-            image.frame(width: 25, height: 25).border(.black)
-            Text(place.strTitle)
+            image.frame(width: 50, height: 50).padding(.leading)
+            Text(place.strTitle).font(.title3).bold().padding()
         }
         .task {
             image = await place.getImage()

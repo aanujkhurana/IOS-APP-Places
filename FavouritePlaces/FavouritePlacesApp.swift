@@ -9,7 +9,7 @@ import SwiftUI
 
 @main
 struct FavouritePlacesApp: App {
-    var handler = PersistenceHandler.shared
+    var handler = PersistenceHandler.shared // for coredata interaction
     var body: some Scene {
         WindowGroup {
             ContentView().environment(\.managedObjectContext, handler.container.viewContext)

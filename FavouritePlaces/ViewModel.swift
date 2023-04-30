@@ -12,6 +12,7 @@ import SwiftUI
 let defaultImage = Image(systemName: "photo").resizable()
 var downloadImages : [URL:Image] = [:]
 
+///extension of places to store entities and download image as default image
 extension Places {
     var strTitle:String {
         get {
@@ -61,6 +62,8 @@ extension Places {
         }
     }
     
+    /// function to download image from url
+    /// - Returns: return downloaded img
     func getImage() async ->Image {
         guard let url = self.imgurl else {return defaultImage}
         if let image = downloadImages[url] {return image}
@@ -81,6 +84,7 @@ func createInitPlaces() {
     
 }
 
+/// Function to save data anywhere change is made
 func saveData() {
     let ctx = PersistenceHandler.shared.container.viewContext
     do {
