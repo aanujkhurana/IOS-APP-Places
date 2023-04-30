@@ -18,6 +18,7 @@
 		AE1B31CA29F8E53A002E056D /* Persistence.swift in Sources */ = {isa = PBXBuildFile; fileRef = AE1B31C929F8E53A002E056D /* Persistence.swift */; };
 		AE1B31CC29F94DA1002E056D /* DetailView.swift in Sources */ = {isa = PBXBuildFile; fileRef = AE1B31CB29F94DA1002E056D /* DetailView.swift */; };
 		AE1F415429FCA1B40071D6F2 /* ViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = AE1F415329FCA1B40071D6F2 /* ViewModel.swift */; };
+		AE1F415A29FE41990071D6F2 /* RowView.swift in Sources */ = {isa = PBXBuildFile; fileRef = AE1F415929FE41990071D6F2 /* RowView.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -52,6 +53,7 @@
 		AE1B31C929F8E53A002E056D /* Persistence.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Persistence.swift; sourceTree = "<group>"; };
 		AE1B31CB29F94DA1002E056D /* DetailView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DetailView.swift; sourceTree = "<group>"; };
 		AE1F415329FCA1B40071D6F2 /* ViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewModel.swift; sourceTree = "<group>"; };
+		AE1F415929FE41990071D6F2 /* RowView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RowView.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -104,6 +106,7 @@
 			children = (
 				AE1B319C29F8E492002E056D /* FavouritePlacesApp.swift */,
 				AE1B319E29F8E492002E056D /* ContentView.swift */,
+				AE1F415929FE41990071D6F2 /* RowView.swift */,
 				AE1B31CB29F94DA1002E056D /* DetailView.swift */,
 				AE1F415329FCA1B40071D6F2 /* ViewModel.swift */,
 				AE1B31C929F8E53A002E056D /* Persistence.swift */,
@@ -271,6 +274,7 @@
 			files = (
 				AE1B319F29F8E492002E056D /* ContentView.swift in Sources */,
 				AE1B31CA29F8E53A002E056D /* Persistence.swift in Sources */,
+				AE1F415A29FE41990071D6F2 /* RowView.swift in Sources */,
 				AE1B319D29F8E492002E056D /* FavouritePlacesApp.swift in Sources */,
 				AE1B31CC29F94DA1002E056D /* DetailView.swift in Sources */,
 				AE1B31C829F8E4AD002E056D /* Model.xcdatamodeld in Sources */,

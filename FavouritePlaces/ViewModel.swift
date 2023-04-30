@@ -21,14 +21,6 @@ extension Places {
             self.title = newValue
         }
     }
-    var strDesc:String {
-        get {
-            self.desc ?? "unknown"
-        }
-        set {
-            self.desc = newValue
-        }
-    }
     var strLocation:String {
         get {
             self.location ?? "unknown"
@@ -76,7 +68,7 @@ extension Places {
             let (data, _) = try await URLSession.shared.data(from: url)
             guard let uiimg = UIImage(data: data) else {return defaultImage}
             let image = Image(uiImage: uiimg).resizable()
-            downloadImages[url] = image
+            downloadImages[url]=image
             return image
         }catch {
             print("error in download image \(error)")
@@ -87,4 +79,13 @@ extension Places {
 }
 func createInitPlaces() {
     
+}
+
+func saveData() {
+    let ctx = PersistenceHandler.shared.container.viewContext
+    do {
+        try ctx.save()
+    }catch {
+        print("Error to save with \(error)")
+    }
 }

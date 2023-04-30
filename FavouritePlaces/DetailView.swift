@@ -9,13 +9,11 @@ import SwiftUI
 import CoreData
 struct DetailView: View {
     
-    var place: Places
-    @Environment(\.managedObjectContext) var ctx
-    
-    @State var isEditing = false
+    @ObservedObject var place: Places
+//    @Environment(\.managedObjectContext) var ctx
+    @Environment(\.editMode) var editMode
     @State var title = ""
     @State var location = ""
-    @State var desc = ""
     @State var latitude = ""
     @State var longitude = ""
     @State var url = ""
@@ -23,11 +21,11 @@ struct DetailView: View {
     
     var body: some View {
         VStack{
-            if !isEditing {
+            if (editMode?.wrappedValue == .inactive) {
                 List {
-                    image.scaledToFit().cornerRadius(20).shadow(radius: 20)
+                    if (url == ""){image.frame(width: 25,height: 25)}
+                    else {image.scaledToFit().cornerRadius(20).shadow(radius: 20)}
                     Text("Title: \(title)")
-                    Text("Description: \(desc)")
                     Text("location: \(location)")
                     VStack{
                         Text("Latitude: \(latitude)")
@@ -38,9 +36,8 @@ struct DetailView: View {
                 List{
                     TextField("New title:", text: $title)
                     TextField("Url:", text: $url)
-                    Text("Enter Place Details:").font(.headline)
+                    Text("Enter Location Details:").font(.headline)
                     TextField("Location: ", text: $location)
-                    TextField("Description: ", text: $desc)
                     VStack{
                         HStack{
                             Text("Latitude: ")
@@ -54,32 +51,24 @@ struct DetailView: View {
 
                 }
             }
-            HStack {
-                Button("\(isEditing ? "Confirm" : "Edit")"){
-                    if(isEditing) {
-                        place.strTitle = title
-                        place.strLocation = location
-                        place.strLongitude = longitude
-                        place.strLatitude = latitude
-                        place.strDesc = desc
-                        place.strUrl = url
-                        saveData()
-                        Task {
-                            image = await place.getImage()
-                        }
-                    }
-                    isEditing.toggle()
-                }
-            }
         }
         .navigationTitle(title)
+        .navigationBarItems(trailing: EditButton())
         .onAppear{
             title = place.strTitle
             location = place.strLocation
-            desc = place.strDesc
             latitude = place.strLatitude
             longitude = place.strLongitude
             url = place.strUrl
+            saveData()
+        }
+        .onDisappear{
+            place.strTitle = title
+            place.strUrl = url
+            place.strLocation = location
+            place.strLongitude = longitude
+            place.strLatitude = latitude
+            saveData()
         }
         .task {
             await image = place.getImage()
