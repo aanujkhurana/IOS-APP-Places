@@ -10,7 +10,7 @@ import CoreData
 import SwiftUI
 
 let defaultImage = Image(systemName: "photo").resizable()
-var downloadImages :[URL:Image] = [:]
+var downloadImages : [URL:Image] = [:]
 
 extension Places {
     var strTitle:String {
@@ -23,10 +23,18 @@ extension Places {
     }
     var strDesc:String {
         get {
-            self.title ?? "unknown"
+            self.desc ?? "unknown"
         }
         set {
-            self.title = newValue
+            self.desc = newValue
+        }
+    }
+    var strLocation:String {
+        get {
+            self.location ?? "unknown"
+        }
+        set {
+            self.location = newValue
         }
     }
     var strLatitude : String {
@@ -60,6 +68,7 @@ extension Places {
             self.imgurl = url
         }
     }
+    
     func getImage() async ->Image {
         guard let url = self.imgurl else {return defaultImage}
         if let image = downloadImages[url] {return image}
@@ -67,7 +76,7 @@ extension Places {
             let (data, _) = try await URLSession.shared.data(from: url)
             guard let uiimg = UIImage(data: data) else {return defaultImage}
             let image = Image(uiImage: uiimg).resizable()
-            downloadImages[url]=image
+            downloadImages[url] = image
             return image
         }catch {
             print("error in download image \(error)")
@@ -76,15 +85,6 @@ extension Places {
         return defaultImage
     }
 }
-func createInitAnimals() {
+func createInitPlaces() {
     
-}
-
-func saveData() {
-    let ctx = PersistenceHandler.shared.container.viewContext
-    do{
-        try ctx.save()
-    } catch {
-        fatalError("Error in save data with \(error)")
-    }
 }

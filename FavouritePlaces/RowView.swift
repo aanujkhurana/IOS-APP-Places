@@ -6,18 +6,18 @@
 //
 
 import SwiftUI
-
-struct RowView: View {
-    var place:Places
-    @State var image = defaultImage
-    var body: some View {
-        HStack{
-            image.frame(width: 50, height: 50).clipShape(Circle())
-            Text(place.title ?? "Unknown Title")
-        }
-        .task {
-            image = await place.getImage()
-        }
-    }
-}
-
+//
+//struct RowView: View {
+//    var place:Places
+//    @State var image = defaultImage
+//    var body: some View {
+//        HStack{
+//            image.frame(width: 50, height: 50).clipShape(Circle())
+//            Text(place.title ?? "Unknown Title")
+//        }
+//        .task {
+//            image = await place.getImage()
+//        }
+//    }
+//}
+//
