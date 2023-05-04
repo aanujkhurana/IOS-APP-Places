@@ -27,6 +27,12 @@ struct ContentView: View {
                     }
                 }.navigationTitle("Favourite Places 🌎")
                 .navigationBarItems(leading: Button("+ Add"){addNewPlace()}, trailing: EditButton())
+                Spacer()
+            }
+        }
+        .task {
+            if(places.count == 0) {
+                loadDefaultData()
             }
         }
     }
@@ -41,7 +47,13 @@ struct ContentView: View {
     }
     /// function to delete places
     func deletePlaces(_ idx: IndexSet) {
-        idx.map{places[$0]}.forEach{place in ctx.delete(place)}
-        saveData()
+        var place:[Places] = []
+        idx.forEach{
+            place.append(places[$0])
+        }
+        deletePlace(place:place)
+        ///deletePlace function in viewModel
     }
+    
+    
 }

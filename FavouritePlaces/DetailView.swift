@@ -24,46 +24,49 @@ struct DetailView: View {
         VStack{
             if (editMode?.wrappedValue == .inactive) {
                 List {
-                    //display small image if no url
-                    if (url == ""){image.frame(width: 25,height: 25)}
-                    else {image.scaledToFit().cornerRadius(12)}
+                    //display small image (noimage) if no url
+                    if (url == ""){ image.frame(width: 15,height: 15) }
+                    else { image.scaledToFit().cornerRadius(12) }
+                    
+                    Text("Location Details:").font(.title2).foregroundColor(.accentColor)
+                    Text("\(location)").font(.title2).fontWeight(.medium)
                     HStack{
-                        Text("Location Details:").font(.headline).foregroundColor(.accentColor)
-                        Text("\(location)").bold()
+                        
+                        Text("Latitude: ").font(.title3).foregroundColor(.accentColor)
+                        Text("\(latitude)").font(.title3).fontWeight(.medium)
+                        
+                        Text("Longitude: ").font(.title3).foregroundColor(.accentColor)
+                        Text("\(longitude)").font(.title3).fontWeight(.medium)
                     }
-                    HStack{
-                            Text("Latitude: ").font(.headline).foregroundColor(.accentColor)
-                            Text("\(latitude)").bold()
-                        }
-                    HStack{
-                            Text("Longitude: ").font(.headline).foregroundColor(.accentColor)
-                            Text("\(longitude)").bold()
-                        }
                 }
             }
             else {
                 List{
-                    Text("Enter Title:").font(.headline).foregroundColor(.accentColor)
-                    TextField("New title:", text: $title)
-                    Text("Enter Url:").font(.headline).foregroundColor(.accentColor)
-                    TextField("Url:", text: $url)
-                    Text("Enter Location Details:").font(.headline).foregroundColor(.accentColor)
-                    TextField("Location: ", text: $location)
+                    
+                    Text("Enter Url:").font(.title3).foregroundColor(.accentColor)
+                    TextField("Url:", text: $url).font(.title3).fontWeight(.medium)
+                    
+                    image.scaledToFit().cornerRadius(12)
+                    
+                    Text("Enter Title:").font(.title2).foregroundColor(.accentColor)
+                    TextField("New title:", text: $title).font(.title2).fontWeight(.medium)
+                    
+                    Text("Enter Location Details:").font(.title3).foregroundColor(.accentColor)
+                    TextField("Location: ", text: $location).font(.title3).fontWeight(.medium)
+                    
                     VStack{
                         HStack{
-                            Text("Enter Latitude: ").font(.headline).foregroundColor(.accentColor)
-                            TextField("Latitude: ", text: $latitude)
+                            Text("Enter Latitude: ").font(.title3).foregroundColor(.accentColor)
+                            TextField("Latitude: ", text: $latitude).font(.title3).fontWeight(.medium)
                         }
                         HStack{
-                            Text("Enter Longitude: ").font(.headline).foregroundColor(.accentColor)
-                            TextField("Longitude: ", text: $longitude)
+                            Text("Enter Longitude: ").font(.title3).foregroundColor(.accentColor)
+                            TextField("Longitude: ", text: $longitude).font(.title3).fontWeight(.medium)
                         }
                     }
-                    image.scaledToFit().cornerRadius(12)
                 }
             }// end else, in edit mode
-        }
-        .navigationTitle(title)
+        }.navigationTitle(title)
         .navigationBarItems(trailing: EditButton())
         .onAppear{
             title = place.strTitle
@@ -71,8 +74,7 @@ struct DetailView: View {
             latitude = place.strLatitude
             longitude = place.strLongitude
             url = place.strUrl
-            saveData()
-            // to save data in Places model
+
         }
         .onDisappear{
             place.strTitle = title
@@ -81,6 +83,7 @@ struct DetailView: View {
             place.strLongitude = longitude
             place.strLatitude = latitude
             saveData()
+            // to save data in Places model
         }
         .task {
             await image = place.getImage()

@@ -13,7 +13,7 @@ struct PersistenceHandler {
     static let shared = PersistenceHandler()
     let container: NSPersistentContainer
     init() {
-        container = NSPersistentContainer(name:"Model")
+        container = NSPersistentContainer(name:"Places")
         container.loadPersistentStores { _, error in
             if let e = error {
                 fatalError("Error in load data \(e).")

@@ -14,7 +14,7 @@
 		AE1B31AE29F8E493002E056D /* FavouritePlacesTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = AE1B31AD29F8E493002E056D /* FavouritePlacesTests.swift */; };
 		AE1B31B829F8E493002E056D /* FavouritePlacesUITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = AE1B31B729F8E493002E056D /* FavouritePlacesUITests.swift */; };
 		AE1B31BA29F8E493002E056D /* FavouritePlacesUITestsLaunchTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = AE1B31B929F8E493002E056D /* FavouritePlacesUITestsLaunchTests.swift */; };
-		AE1B31C829F8E4AD002E056D /* Model.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = AE1B31C629F8E4AD002E056D /* Model.xcdatamodeld */; };
+		AE1B31C829F8E4AD002E056D /* Places.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = AE1B31C629F8E4AD002E056D /* Places.xcdatamodeld */; };
 		AE1B31CA29F8E53A002E056D /* Persistence.swift in Sources */ = {isa = PBXBuildFile; fileRef = AE1B31C929F8E53A002E056D /* Persistence.swift */; };
 		AE1B31CC29F94DA1002E056D /* DetailView.swift in Sources */ = {isa = PBXBuildFile; fileRef = AE1B31CB29F94DA1002E056D /* DetailView.swift */; };
 		AE1F415429FCA1B40071D6F2 /* ViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = AE1F415329FCA1B40071D6F2 /* ViewModel.swift */; };
@@ -112,7 +112,7 @@
 				AE1B31CB29F94DA1002E056D /* DetailView.swift */,
 				AE1F415329FCA1B40071D6F2 /* ViewModel.swift */,
 				AE1B31C929F8E53A002E056D /* Persistence.swift */,
-				AE1B31C629F8E4AD002E056D /* Model.xcdatamodeld */,
+				AE1B31C629F8E4AD002E056D /* Places.xcdatamodeld */,
 				AE1B31A029F8E493002E056D /* Assets.xcassets */,
 				AE1B31A229F8E493002E056D /* Preview Content */,
 				AE1F415B29FE8AF50071D6F2 /* Documentation.docc */,
@@ -281,7 +281,7 @@
 				AE1F415C29FE8AF50071D6F2 /* Documentation.docc in Sources */,
 				AE1B319D29F8E492002E056D /* FavouritePlacesApp.swift in Sources */,
 				AE1B31CC29F94DA1002E056D /* DetailView.swift in Sources */,
-				AE1B31C829F8E4AD002E056D /* Model.xcdatamodeld in Sources */,
+				AE1B31C829F8E4AD002E056D /* Places.xcdatamodeld in Sources */,
 				AE1F415429FCA1B40071D6F2 /* ViewModel.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -609,13 +609,13 @@
 /* End XCConfigurationList section */
 
 /* Begin XCVersionGroup section */
-		AE1B31C629F8E4AD002E056D /* Model.xcdatamodeld */ = {
+		AE1B31C629F8E4AD002E056D /* Places.xcdatamodeld */ = {
 			isa = XCVersionGroup;
 			children = (
 				AE1B31C729F8E4AD002E056D /* Model.xcdatamodel */,
 			);
 			currentVersion = AE1B31C729F8E4AD002E056D /* Model.xcdatamodel */;
-			path = Model.xcdatamodeld;
+			path = Places.xcdatamodeld;
 			sourceTree = "<group>";
 			versionGroupType = wrapper.xcdatamodel;
 		};
