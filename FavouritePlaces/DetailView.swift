@@ -7,6 +7,8 @@
 
 import SwiftUI
 import CoreData
+import MapKit
+import CoreLocation
 
 struct DetailView: View {
     
@@ -21,6 +23,7 @@ struct DetailView: View {
     @Environment(\.editMode) var editMode
      
     var body: some View {
+        @State var region = MKCoordinateRegion(center: CLLocationCoordinate2D(latitude:place.latitude, longitude: place.longitude), span: MKCoordinateSpan(latitudeDelta: 0.1, longitudeDelta: 0.1 ))
         VStack{
             if (editMode?.wrappedValue == .inactive) {
                 List {
@@ -30,14 +33,18 @@ struct DetailView: View {
                     
                     Text("Location Details:").font(.title2).foregroundColor(.accentColor)
                     Text("\(location)").font(.title2).fontWeight(.medium)
-                    HStack{
-                        
-                        Text("Latitude: ").font(.title3).foregroundColor(.accentColor)
-                        Text("\(latitude)").font(.title3).fontWeight(.medium)
-                        
-                        Text("Longitude: ").font(.title3).foregroundColor(.accentColor)
-                        Text("\(longitude)").font(.title3).fontWeight(.medium)
-                    }
+                    Text("Map:").font(.title2).foregroundColor(.accentColor)
+//                    HStack{
+                        NavigationLink(destination: MapEditView(place: place)) {
+                            Map(coordinateRegion: $region)
+                            Text("Map of \(location)").font(.title3).fontWeight(.medium)
+                        }
+                        HStack{
+                            Text("Latitude: ").font(.title3).foregroundColor(.accentColor)
+                            Text("\(latitude)").font(.title3).fontWeight(.medium)}
+                        HStack{
+                            Text("Longitude: ").font(.title3).foregroundColor(.accentColor)
+                            Text("\(longitude)").font(.title3).fontWeight(.medium)}
                 }
             }
             else {
@@ -48,10 +55,10 @@ struct DetailView: View {
                     
                     image.scaledToFit().cornerRadius(12)
                     
-                    Text("Enter Title:").font(.title2).foregroundColor(.accentColor)
-                    TextField("New title:", text: $title).font(.title2).fontWeight(.medium)
+                    Text("Enter Name:").font(.title2).foregroundColor(.accentColor)
+                    TextField("Name:", text: $title).font(.title2).fontWeight(.medium)
                     
-                    Text("Enter Location Details:").font(.title3).foregroundColor(.accentColor)
+                    Text("Enter Location:").font(.title3).foregroundColor(.accentColor)
                     TextField("Location: ", text: $location).font(.title3).fontWeight(.medium)
                     
                     VStack{
@@ -64,7 +71,10 @@ struct DetailView: View {
                             TextField("Longitude: ", text: $longitude).font(.title3).fontWeight(.medium)
                         }
                     }
+                }.onDisappear{
+                    locToMap() // to update map and cordinates after edit mode
                 }
+
             }// end else, in edit mode
         }.navigationTitle(title)
         .navigationBarItems(trailing: EditButton())
@@ -82,11 +92,21 @@ struct DetailView: View {
             place.strLocation = location
             place.strLongitude = longitude
             place.strLatitude = latitude
-            saveData()
-            // to save data in Places model
+            saveData() // to save data in Places model
         }
         .task {
             await image = place.getImage()
+        }
+    }
+    
+    /// function to map and cordinates with location
+    func locToMap() {
+        place.location = location
+        Task {
+            guard let _ = await place.updateCordinates() else {return}
+            latitude = place.strLatitude
+            longitude = place.strLongitude
+            place.updateMap()
         }
     }
 }

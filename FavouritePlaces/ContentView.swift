@@ -6,11 +6,13 @@
 //
 import SwiftUI
 import CoreData
+import MapKit
 
 struct ContentView: View {
     
     @Environment(\.managedObjectContext) var ctx
     @FetchRequest(sortDescriptors: []) var places : FetchedResults<Places>
+    
     
     var body: some View {
         VStack {

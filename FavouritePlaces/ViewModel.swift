@@ -8,11 +8,13 @@
 import Foundation
 import CoreData
 import SwiftUI
+import CoreLocation
+import MapKit
 
 let defaultImage = Image(systemName: "photo").resizable()
 var downloadImages : [URL:Image] = [:]
 let ctx = PersistenceHandler.shared.container.viewContext
-
+var region = MKCoordinateRegion(center: CLLocationCoordinate2D(latitude: 0, longitude: 0), span: MKCoordinateSpan(latitudeDelta: 0.1, longitudeDelta: 0.1 ))
 ///extension of places
 extension Places {
     var strTitle:String {
@@ -31,28 +33,26 @@ extension Places {
             self.location = newValue
         }
     }
-    var strLatitude : String {
+    var strLatitude: String {
         get {
-            "\(self.latitude)"
+            String(format: "%.4f", self.latitude)
         }
         set {
-            guard let latitude = Float(newValue) else {
-                return
-            }
-            self.latitude = latitude
+            guard let lat = Double(newValue), lat <= 90, lat >= -90 else {return}
+            latitude = lat
         }
     }
-    var strLongitude : String {
+
+    var strLongitude: String {
         get {
-            "\(self.longitude)"
+            String(format: "%.4f", self.longitude)
         }
         set {
-            guard let longitude = Float(newValue) else {
-                return
-            }
-            self.longitude = longitude
+            guard let long = Double(newValue), long <= 180, long >= -180 else {return}
+            longitude = long
         }
     }
+    
     var strUrl: String {
         get{
             self.imgurl?.absoluteString ?? ""
@@ -60,6 +60,15 @@ extension Places {
         set {
             guard let url = URL(string: newValue) else {return}
             self.imgurl = url
+        }
+    }
+    
+    var gldDlta: Double {
+        get{
+            100.0 / self.delta
+        }
+        set {
+            self.delta = 100.0/newValue
         }
     }
     
@@ -72,7 +81,7 @@ extension Places {
             let (data, _) = try await URLSession.shared.data(from: url)
             guard let uiImage = UIImage(data: data) else {return defaultImage}
             let image = Image(uiImage: uiImage).resizable()
-            downloadImages[url] = image
+            downloadImages[url] = image // error is here
             return image
         }catch {
             print("error in download image \(error)")
@@ -80,16 +89,52 @@ extension Places {
         
         return defaultImage
     }
+    
+    
+    
+    func updateMap() {
+        region.center.latitude = latitude
+        region.center.longitude = longitude
+    }
+    
+    func updatelocation() async -> String {
+        location = await locationToCordinates(latitude, longitude)
+        return location ?? ""
+    }
+    func updateCordinates() async -> CLLocation? {
+        if let loc = await cordinatesToLocation(location ?? "") {
+            latitude = loc.coordinate.latitude
+            longitude = loc.coordinate.longitude
+            return loc
+        }
+        return nil
+    }
+    
+}
+//end places ext
+
+func cordinatesToLocation(_ address: String) async -> CLLocation? {
+    let coder = CLGeocoder()
+    guard let marks = try? await coder.geocodeAddressString(address) else {return nil}
+    guard let loc = marks.first?.location else {return nil}
+    return loc
+}
+
+func locationToCordinates(_ lat: Double, _ long: Double) async -> String {
+    let coder = CLGeocoder()
+    let loc = CLLocation(latitude: lat, longitude: long)
+    guard let marks = try? await coder.reverseGeocodeLocation(loc), let pmk = marks.first else {return "Can't find the address"}
+    return pmk.name ?? pmk.country ?? pmk.administrativeArea ?? pmk.locality ?? pmk.thoroughfare ?? "Unknown place"
 }
 
 func loadDefaultData() {
-    let defaultPlaces = [["Japan","HIHao Temple","51.71","-141.2",
+    let defaultPlaces = [["Japan","HIHao Temple","0","0",
                           "https://ramatniseko.com/wp-content/uploads/shutterstock_193421459_min-e1560128306371.jpg"],
-                         ["Karela","Cameroon Park","71.6","-721.22",
+                         ["Karela","Cameroon Park","0","0",
                           "https://tse3.mm.bing.net/th?id=OIP.m3Z-u5DkkC-n83ce3T-oYgHaEo&pid=Api&P=0"],
-                         ["Peru","Boston Bridge","61.6","-321.2",
+                         ["Peru","Boston Bridge","0","0",
                           "https://images.pexels.com/photos/1462935/pexels-photo-1462935.jpeg?cs=srgb&dl=pexels-joseph-costa-1462935.jpg&fm=jpg"],
-                         ["Dubai","Burj Khalifa","241.1","-181.2",
+                         ["Dubai","Burj Khalifa","0","0",
                           "https://media.tacdn.com/media/attractions-splice-spp-674x446/07/74/81/8c.jpg"]]
     
     defaultPlaces.forEach {
@@ -113,7 +158,7 @@ func deletePlace(place: [Places]) {
 
 
 func createInitPlaces() {
-    
+
 }
 
 /// Function to save data anywhere change is made
@@ -125,3 +170,4 @@ func saveData() {
         print("Error to save with \(error)")
     }
 }
+
