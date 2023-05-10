@@ -35,7 +35,7 @@ struct DetailView: View {
                     Text("\(location)").font(.title2).fontWeight(.medium)
                     Text("Map:").font(.title2).foregroundColor(.accentColor)
 //                    HStack{
-                        NavigationLink(destination: MapEditView(place: place)) {
+                        NavigationLink(destination: MapView(place: place)) {
                             Map(coordinateRegion: $region)
                             Text("Map of \(location)").font(.title3).fontWeight(.medium)
                         }
