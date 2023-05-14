@@ -42,7 +42,7 @@ struct ContentView: View {
     /// function to add new place
     func addNewPlace() {
         let place = Places(context: ctx)
-        place.title = "New Place"
+        place.location = "New Place"
         place.latitude = 0.0
         place.longitude = 0.0
         saveData()

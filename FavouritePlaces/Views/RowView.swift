@@ -14,7 +14,7 @@ struct RowView: View {
     var body: some View {
         HStack{
             image.frame(width: 50, height: 50).clipShape(Circle())
-            Text(place.strTitle).font(.title2).fontWeight(.medium).padding(.leading)
+            Text(place.strLocation).font(.title2).fontWeight(.medium).padding(.leading)
         }
         .task {
             image = await place.getImage()
