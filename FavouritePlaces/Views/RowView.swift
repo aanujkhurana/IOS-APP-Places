@@ -7,6 +7,11 @@
 
 import SwiftUI
 
+
+/// displays each row of the Places List on the the master with and includes an image icon plus the name of the place
+/// - Parameters:
+///   - place:An observed object representing a Place instance.
+///   - image:A state variable holding the image associated with a landmark of the place.
 struct RowView: View {
     @State var image = defaultImage
     @ObservedObject var place: Places

@@ -23,7 +23,7 @@ struct ContentView: View {
                         NavigationLink(destination: DetailView(place: place)) {
                             RowView(place: place)
                         }
-
+                        
                     }.onDelete { idx in
                         deletePlaces(idx)
                     }
@@ -39,7 +39,7 @@ struct ContentView: View {
         }
     }
     
-    /// function to add new place
+    /// This function adds a new `Place` instance and saves it in the database.
     func addNewPlace() {
         let place = Places(context: ctx)
         place.location = "New Place"
@@ -47,7 +47,7 @@ struct ContentView: View {
         place.longitude = 0.0
         saveData()
     }
-    /// function to delete places
+    /// This function `Delete place` instance
     func deletePlaces(_ idx: IndexSet) {
         var place:[Places] = []
         idx.forEach{

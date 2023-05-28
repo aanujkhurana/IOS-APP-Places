@@ -21,12 +21,20 @@ struct MapView: View {
     
     @Environment(\.editMode) var editMode
     
+    /// - Parameters:
+    ///   - location: A state variable holding the name of the location.
+    ///   - longitude: A state variable holding the longitude of the place.
+    ///   - latitude: A state variable holding the latitude of the place.
+    ///   - region: A state variable holding the coordinate region for the map view. It is used to specify the centre and span of the map view.
+    
     var body: some View {
         VStack{
             //outside edit mode
             if (editMode?.wrappedValue == .inactive){
                 VStack{
-                    Map(coordinateRegion: $region)
+                    ZStack{
+                        Map(coordinateRegion: $region)}
+                    
                     HStack{
                         Text("Latitude: ").font(.title3).foregroundColor(.accentColor)
                         Text("\(latitude)").font(.title3).fontWeight(.medium)
@@ -35,33 +43,53 @@ struct MapView: View {
                         Text("Longitude: ").font(.title3).foregroundColor(.accentColor)
                         Text("\(longitude)").font(.title3).fontWeight(.medium)}
                 }
-            //in edit mode
+            //not in edit mode
             } else {
                 VStack{
-                    Map(coordinateRegion: $region)
                     HStack{
-                        Text("Latitude: ").font(.title3).foregroundColor(.accentColor)
-                        TextField("Latitude:",text: $region.Strlat)
+                        Image(systemName: "magnifyingglass.circle")
+                            .onTapGesture {
+                                place.fromLocToAddress()
+                                location=place.strLocation
+                                saveData()
+                            }
+                        TextField("location name: ", text: $location)
                             .font(.title3)
                             .fontWeight(.medium)
                             .textFieldStyle(.roundedBorder)
                             .padding(.leading)
-                    }
+                    }.padding(.leading)
+                    ZStack{
+                        Map(coordinateRegion: $region)
+                        }
                     HStack{
-                        Text("Longitude: ").font(.title3).foregroundColor(.accentColor)
-                        TextField("Longitude:",text: $region.Strlong)
-                            .font(.title3)
-                            .fontWeight(.medium)
-                            .textFieldStyle(.roundedBorder)
-                            .padding(.leading)
-                    }
+                        Image(systemName: "globe").foregroundColor(Color.blue)
+                            .onTapGesture {
+                                fromAddressToLoc()
+                            }.padding(.leading)
+                        VStack{
+                            Text("Latitude: ").font(.title3).foregroundColor(.accentColor)
+                            TextField("Latitude:",text: $region.Strlat)
+                                .font(.title3)
+                                .fontWeight(.medium)
+                                .textFieldStyle(.roundedBorder)
+                            .padding(.leading)}
+                        VStack{
+                            Text("Longitude: ").font(.title3).foregroundColor(.accentColor)
+                            TextField("Longitude:",text: $region.Strlong)
+                                .font(.title3)
+                                .fontWeight(.medium)
+                                .textFieldStyle(.roundedBorder)
+                            .padding(.leading)}
+                    }.padding(.trailing)
                 }
-                    .onDisappear{
+                    .onChange(of: region) { _ in
+                        place.strLocation=location
                         latitude = region.Strlat
                         longitude = region.Strlong
-                        saveData()
+                        //to update changes
                     }
-            }
+            } //end else
         }
         .navigationTitle("📍Map \(location)")
         .navigationBarItems(trailing: EditButton())
@@ -69,37 +97,41 @@ struct MapView: View {
             latitude = place.strLatitude
             longitude = place.strLongitude
             location = place.strLocation
+            saveData()
         }
         .onDisappear{
             place.strLongitude = longitude
             place.strLatitude = latitude
+            region.center.longitude = place.longitude
+            region.center.latitude = place.latitude
             saveData()
         }
         .task {
-            region.center.longitude = place.longitude
-            region.center.latitude = place.latitude
+            place.updateMap()
+            checkMap()
+            
         }
     }
-    
-//    /// function to update map by cordinates
-//    func searchbyCordinates() {
-//        place.strLongitude = longitude
-//        place.strLatitude = latitude
-//        place.updateMap()
-//        Task {
-//            location = await place.updatelocation()
-//        }
-//    }
-//
-//    /// function to update map by locaion
-//    func searchbyLocation() {
-//        place.location = location
-//        Task {
-//            guard let _ = await place.updateCordinates() else { showAlert = true; return}
-//            latitude = place.strLatitude
-//            longitude = place.strLongitude
-//            place.updateMap()
-//        }
-//    }
-
+    /// function to checkmap and update
+    func checkMap() {
+        latitude = place.strLatitude
+        longitude = place.strLongitude
+        region.center.latitude = place.latitude
+        region.center.longitude = place.longitude
+    }
+    func fromAddressToLoc() {
+        let coder = CLGeocoder()
+        coder.geocodeAddressString(location) { marks, error in
+            if let err = error {
+                print("errof in fromAddressToLoc \(err)")
+                return
+            }
+            guard let pmk = marks?.first else {
+                print("can't find primary placemark in address to loc")
+                return
+            }
+            region.center.latitude = pmk.location?.coordinate.latitude ?? 0.0
+            region.center.longitude = pmk.location?.coordinate.longitude ?? 0.0
+        }
+    }
 }

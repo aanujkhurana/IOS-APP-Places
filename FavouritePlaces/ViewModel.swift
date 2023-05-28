@@ -84,7 +84,8 @@ extension Places {
     
     
     
-    /// function to update map by region.center
+    /// Updates the map region to the current place's latitude and longitude.
+    /// This function updates the `region` property of the map view to center it around the current place's latitude and longitude. It does not return any value.`
     func updateMap() {
         region.center.latitude = latitude
         region.center.longitude = longitude
@@ -106,6 +107,131 @@ extension Places {
         }
         return nil
     }
+    
+    /// This function fetches the sunrise and sunset times for the specified location and assigns them to the
+    func fetchSunriseSunset() {
+        let urlStr="https://api.sunrise-sunset.org/json?lat=\(self.strLatitude)&lng=\(self.strLongitude)&date=today"
+        guard let url=URL(string: urlStr) else {return}
+        let request=URLRequest(url: url)
+        URLSession.shared.dataTask(with: request){ data, _, _ in
+            guard let data = data,
+                  let api=try? JSONDecoder().decode(SunriseSunsetAPI.self, from: data)
+            else {return}  //need timezone struct
+            DispatchQueue.main.async {
+                self.sunrise=api.results.sunrise
+                self.sunset=api.results.sunset
+            }
+        }.resume()
+    }
+    
+    /// Fetches the time zone for the specified coordinates and assigns it to the `timeZone` property of place object
+    ///- Parameters:
+    ///    - latitude: The latitude of the location.
+    ///    - longitude: The longitude of the location.
+    /// - Note: The `timeZone` property will be updated asynchronously on the main queue.
+    func fetchTimeZone() {
+        let urlStr="https://timeapi.io/api/TimeZone/coordinate?latitude=\(self.latitude)&longitude=\(self.longitude)"
+        guard let url=URL(string: urlStr) else {return}
+        let request=URLRequest(url: url)
+        URLSession.shared.dataTask(with: request){ data, _, _ in
+            guard let data = data,
+                  let api=try? JSONDecoder().decode(MyTimeZone.self, from: data)
+            else {return}  //need timezone struct
+            DispatchQueue.main.async {
+                self.timeZone = api.timeZone
+            }
+        }.resume()
+    }
+    
+    /// View representation of the time zone.
+    /// This computed property returns a view that displays the time zone information.
+    /// - Returns: A view displaying the time zone.
+    var timeZoneView: some View{
+        HStack{
+            Text("TimeZone: ")
+            if let tz=self.timeZone {
+                Text(tz)
+            }else{
+                    ProgressView()
+                }
+        }
+    }
+   
+    /// View representation of the sunrise time.
+    /// - Returns: A view displaying the sunrise time.
+    var SunriseView: some View{
+        HStack{
+            if let tm = self.sunrise {
+                if let tz = self.timeZone {
+                    let ltm = self.getLocalTimeFromGMT(tm, tz)
+                    Text("\(ltm)")
+                }
+                else{
+                    Text("GMT:\(tm)")
+                }
+            }else{
+                    ProgressView()
+            }
+        }
+    }
+    
+    /// View representation of the sunset time.
+    /// - Returns: A view displaying the sunset time.
+    var SunsetView: some View{
+        HStack{
+            if let tm = self.sunset {
+                if let tz = self.timeZone {
+                    let ltm = self.getLocalTimeFromGMT(tm, tz)
+                    Text("\(ltm)")
+                }
+                else{
+                    Text("GMT:\(tm)")
+                }
+            }else{
+                    ProgressView()
+            }
+        }
+    }
+    
+    /// Function to convert GMT time to the local time zone.
+    /// - Parameters:
+    ///   - tm: The GMT time to convert.
+    ///   - tz: The time zone identifier for the local time.
+    /// - Returns: The local time converted from GMT.
+    func getLocalTimeFromGMT (_ tm:String, _ tz:String) -> String  {
+        let inputFormatter = DateFormatter()
+        inputFormatter.dateStyle = .none
+        inputFormatter.timeStyle = .medium
+        inputFormatter.timeZone = .init(secondsFromGMT:0)
+        
+        let outputFormatter = DateFormatter()
+        outputFormatter.dateStyle = .none
+        outputFormatter.timeStyle = .medium
+        outputFormatter.timeZone = TimeZone(identifier: tz)
+        
+        if let time=inputFormatter.date(from: tm) {
+            return outputFormatter.string(from: time)
+        }
+            return ""
+    }
+    
+   
+    /// Converts the current location coordinates to an address.
+    func fromLocToAddress() {
+        let coder = CLGeocoder()
+        coder.reverseGeocodeLocation(CLLocation(latitude: latitude, longitude: longitude)) { marks, error in
+            if let err = error {
+                print("error in fromLocToAddress: \(err)")
+                return
+            }
+            guard let mark = marks?.first else {
+                print("can't find primary placemark in loc to address")
+                return
+            }
+            self.location = mark.name ?? mark.country ?? mark.locality ?? mark.administrativeArea ?? "No name"
+        }
+    }
+
     
 }
 //end places ext
@@ -173,6 +299,7 @@ func loadDefaultData() {
     saveData()
 }
 
+
 /// MK Coordinate extension to store latitude and longitude from region.centre
 extension MKCoordinateRegion: Equatable {
     
@@ -200,3 +327,18 @@ extension MKCoordinateRegion: Equatable {
     }
 }
 
+/// Structure to represent the time zone obtained from an API.
+struct MyTimeZone: Decodable {
+    var timeZone: String
+}
+
+/// Structure to represent the sunrise and sunset times obtained from an API.
+struct SunriseSunset: Decodable {
+    var sunrise: String
+    var sunset: String
+}
+
+/// Structure to represent the API response for sunrise and sunset times.
+struct SunriseSunsetAPI: Decodable {
+    var results: SunriseSunset
+}

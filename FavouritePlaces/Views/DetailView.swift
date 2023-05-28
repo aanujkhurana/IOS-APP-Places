@@ -21,6 +21,15 @@ struct DetailView: View {
     @State var url = ""
     @State var image = defaultImage
     
+    /// - Parameters:
+    ///   - description:An observed object representing a desc instance.
+    ///   - location: A state variable holding the location details of the place.
+    ///   - url: A state variable holding the url details of a landmark in a place.
+    ///   - longitude: A state variable holding the longitude of the place.
+    ///   - latitude: A state variable holding the latitude of the place.
+    ///   - image: A state variable holding the image associated with a landmark of the place.
+    ///   - region: A state variable holding the coordinate region for the map view. It is used to specify the centre and span of the map view.
+    
     @Environment(\.editMode) var editMode
     
     @State var region = MKCoordinateRegion(center: CLLocationCoordinate2D(latitude:1, longitude: 1), span: MKCoordinateSpan(latitudeDelta: 0.1, longitudeDelta: 0.1 ))
@@ -42,6 +51,13 @@ struct DetailView: View {
                             Text("Map of \(location)").font(.title3).fontWeight(.medium)
                         }
                 }
+                HStack{
+                    Image(systemName: "sunrise")
+                    place.SunriseView
+                    Spacer()
+                    Image(systemName: "sunrise.fill")
+                    place.SunsetView
+                }.padding()
             }
             else {
                 List{
@@ -69,7 +85,7 @@ struct DetailView: View {
             latitude = place.strLatitude
             longitude = place.strLongitude
             url = place.strUrl
-
+            saveData()
         }
         .onDisappear{
             place.strLocation = location
@@ -79,17 +95,8 @@ struct DetailView: View {
         }
         .task {
             await image = place.getImage()
+            place.fetchTimeZone()
+            place.fetchSunriseSunset()
         }
     }
-    
-    /// function to map and cordinates with location
-//    func locToMap() {
-//        place.title = title
-//        Task {
-//            guard let _ = await place.updateCordinates() else {return}
-//            latitude = place.strLatitude
-//            longitude = place.strLongitude
-//            place.updateMap()
-//        }
-//    }
 }
