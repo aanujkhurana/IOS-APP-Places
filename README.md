@@ -1,4 +1,5 @@
 # IOS-APP---MyPlaces
 - Ios app created using Swift
-- The App is simple you can find or save any location (place). 
-- The App uses Apple Maps for map, and also Location Service(when enabled).
+- The App perfrom CRUD function
+- You can Create or Find any location (place) and create a list of saved Places.
+- The App uses AppleMaps for Map service, and also Location Service (when enabled).
