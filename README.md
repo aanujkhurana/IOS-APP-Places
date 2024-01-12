@@ -3,7 +3,7 @@
 - You can Create or Find any location (place) and create a list of saved Places.
 - The App uses AppleMaps for Map service, and also Location Service (when enabled).
 
-# ``FavouritePlaces``
+# ``FavouritePlaces 🌏``
 
 ios Application that has list of places with image, detailed view display details map of the location, in mapview user can ajust location or cordinates. 
 
