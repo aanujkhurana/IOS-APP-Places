@@ -20,4 +20,4 @@ This aim is to use CoreData to develop a dynamic Master/Detail app with persiste
 - how to fetch time zone 
 - how to set sunset and sunrise
 
-![Alt text](/Screenshots/img1.png?raw=true "Optional Title")
+![Alt text](/../main/screenshots/img1.png?raw=true "Optional Title")
