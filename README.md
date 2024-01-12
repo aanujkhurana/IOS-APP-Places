@@ -20,9 +20,20 @@ This aim is to use CoreData to develop a dynamic Master/Detail app with persiste
 - how to fetch time zone 
 - how to set sunset and sunrise
 
-![Alt text](/../main/screenshots/img1.png?raw=true "Optional Title")
 
 
-<div align="center">
+<div align="left">
     <img src="/screenshots/img1.png" width="400px"</img>
+</div>
+
+<div align="right">
+    <img src="/screenshots/img2.png" width="400px"</img>
+</div>
+
+<div align="left">
+    <img src="/screenshots/img3.png" width="400px"</img>
+</div>
+
+<div align="right">
+    <img src="/screenshots/img4.png" width="400px"</img>
 </div>
