@@ -21,3 +21,8 @@ This aim is to use CoreData to develop a dynamic Master/Detail app with persiste
 - how to set sunset and sunrise
 
 ![Alt text](/../main/screenshots/img1.png?raw=true "Optional Title")
+
+
+<div align="center">
+    <img src="/screenshots/img1.png" width="400px"</img>
+</div>
