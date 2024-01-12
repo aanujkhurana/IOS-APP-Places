@@ -21,19 +21,10 @@ This aim is to use CoreData to develop a dynamic Master/Detail app with persiste
 - how to set sunset and sunrise
 
 
-
-<div align="left">
+# screenshots 
+<div align="center">
     <img src="/screenshots/img1.png" width="400px"</img>
-</div>
-
-<div align="right">
     <img src="/screenshots/img2.png" width="400px"</img>
-</div>
-
-<div align="left">
     <img src="/screenshots/img3.png" width="400px"</img>
-</div>
-
-<div align="right">
     <img src="/screenshots/img4.png" width="400px"</img>
 </div>
