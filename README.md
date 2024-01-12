@@ -19,3 +19,5 @@ This aim is to use CoreData to develop a dynamic Master/Detail app with persiste
 - how to use map for location and cordinates
 - how to fetch time zone 
 - how to set sunset and sunrise
+
+![Alt text](/Screenshots/img.jpg?raw=true "Optional Title")
