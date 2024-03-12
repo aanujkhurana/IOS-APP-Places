@@ -30,7 +30,7 @@ By exploring this app, you can learn:
 
 ## 📸 Screenshots
 
-<div align="center">
+<div align="left">
     <img src="/screenshots/img1.png" width="200px" alt="Screenshot 1">
     <img src="/screenshots/img2.png" width="200px" alt="Screenshot 2">
     <img src="/screenshots/img3.png" width="200px" alt="Screenshot 3">
